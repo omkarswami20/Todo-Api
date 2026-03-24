@@ -1,6 +1,6 @@
-const { signupService } = require('../services/authService');
+const { signupService, loginService  } = require('../services/authService');
 
-const Signup = async (req, res) => {
+const signup = async (req, res) => {
     try {
         const { name, email, password, phone } = req.body;
 
@@ -28,5 +28,36 @@ const Signup = async (req, res) => {
     }
 };
 
-// ✅ YEH ADD KARO - sabse neeche!
-module.exports = { Signup };
+//  LOGIN CONTROLLER
+const login = async (req, res) => {
+    try {
+        // Step 1 — Request se data nikalo
+        const { email, password } = req.body;
+
+        // Step 2 — Validation
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'Email aur password required hai'
+            });
+        }
+
+        // Step 3 — Service ko call karo
+        const result = await loginService({ email, password });
+
+        // Step 4 — Success response
+        return res.status(200).json({
+            success: true,
+            message: 'Login successful!',
+            data: result
+        });
+
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+module.exports = { signup, login };

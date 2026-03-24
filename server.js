@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const { connectDB } = require('./config/db');
+const { setupSwagger } = require('./config/swagger');
 const authService = require('./services/auth-service/index');
 
 dotenv.config();
@@ -9,11 +10,10 @@ const app = express();
 app.use(express.json());
 
 connectDB();
+setupSwagger(app);
 
-// Routes
 app.use('/api', authService);
 
-// Test route
 app.get('/', (req, res) => {
     res.json({ message: 'Todo API chal rahi hai!' });
 });
